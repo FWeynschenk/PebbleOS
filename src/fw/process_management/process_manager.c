@@ -704,10 +704,11 @@ DEFINE_SYSCALL(ButtonId, sys_process_get_launch_button, void) {
 
 // -------------------------------------------------------------------------------------------
 DEFINE_SYSCALL(uint32_t, sys_process_get_launch_args, void) {
-  if (sys_process_get_launch_reason() != APP_LAUNCH_TIMELINE_ACTION) {
-    return 0;
-  } else {
+  if (sys_process_get_launch_reason() == APP_LAUNCH_TIMELINE_ACTION || 
+      sys_process_get_launch_reason() == APP_LAUNCH_QUICK_LAUNCH) {
     return (uint32_t) process_manager_get_current_process_args();
+  } else {
+    return 0;
   }
 }
 
