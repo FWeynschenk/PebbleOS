@@ -37,10 +37,18 @@ typedef enum {
 //! @return The method or reason the current application was launched
 AppLaunchReason app_launch_reason(void);
 
+//! Details about how an app was quick launched.
+//! Returned by \ref app_launch_get_args when \ref app_launch_reason is APP_LAUNCH_QUICK_LAUNCH.
+typedef enum {
+  APP_QUICK_LAUNCH_ACTION_HOLD = 0,   //!< User held a single button
+  APP_QUICK_LAUNCH_ACTION_TAP,        //!< User tapped a button (single click)
+  APP_QUICK_LAUNCH_ACTION_COMBO,      //!< User held a button combination
+} AppQuickLaunchAction;
+
 //! Get the argument passed to the app when it was launched.
-//! @note Currently the only way to pass arguments to apps is by using an openWatchApp action
-//! on a pin.
-//! @return The argument passed to the app, or 0 if the app wasn't launched from a Launch App action
+//! @note This is typically used by Timeline actions to pass data (via an openWatchApp action on a pin)
+//! or by Quick Launch to pass the \ref AppQuickLaunchAction type.
+//! @return The argument passed to the app, or 0 if the app wasn't launched with arguments
 uint32_t app_launch_get_args(void);
 
 //!   @} // group Launch_Reason

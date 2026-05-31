@@ -19,6 +19,7 @@
 #include "pbl/services/analytics/analytics.h"
 #include "pbl/services/compositor/compositor_transitions.h"
 #include "applib/app_timer.h"
+#include "applib/app_launch_reason.h"
 #include "applib/ui/click_internal.h"
 #include "pbl/services/notifications/do_not_disturb.h"
 #include "system/logging.h"
@@ -121,8 +122,14 @@ static void prv_combo_back_timer_callback(void *data) {
   }
 
   AppInstallId app_id = prv_combo_get_app(s_active_combo_buttons);
+#ifdef CONFIG_ORIENTATION_MANAGER
+  const ButtonId source_button =
+      (s_active_combo_buttons == COMBO_BACK_UP_BUTTONS ||
+       s_active_combo_buttons == COMBO_BACK_UP_FLIPPED_BUTTONS) ? BUTTON_ID_BACK : BUTTON_ID_UP;
+#else
   const ButtonId source_button =
       (s_active_combo_buttons == COMBO_BACK_UP_BUTTONS) ? BUTTON_ID_BACK : BUTTON_ID_UP;
+#endif
   s_active_combo_buttons = BIT_CLEAR;
   if (app_id != INSTALL_ID_INVALID) {
     // Reset all button states before launching app to prevent state corruption.
@@ -131,6 +138,7 @@ static void prv_combo_back_timer_callback(void *data) {
       .id = app_id,
       .common.reason = APP_LAUNCH_QUICK_LAUNCH,
       .common.button = source_button,
+      .common.args = (void*)APP_QUICK_LAUNCH_ACTION_COMBO,
     });
   }
 }
@@ -208,6 +216,7 @@ static void prv_quick_launch_handler(ClickRecognizerRef recognizer, void *data) 
   prv_launch_app_via_button(&(AppLaunchEventConfig) {
     .id = app_id,
     .common.reason = APP_LAUNCH_QUICK_LAUNCH,
+    .common.args = (void*)APP_QUICK_LAUNCH_ACTION_HOLD,
   }, recognizer);
 }
 
@@ -225,6 +234,7 @@ static void prv_launch_up_down(ClickRecognizerRef recognizer, void *data) {
     prv_launch_app_via_button(&(AppLaunchEventConfig) {
       .id = quick_launch_single_click_get_app(button),
       .common.reason = APP_LAUNCH_QUICK_LAUNCH,
+      .common.args = (void*)APP_QUICK_LAUNCH_ACTION_TAP,
     }, recognizer);
     return;
   }
