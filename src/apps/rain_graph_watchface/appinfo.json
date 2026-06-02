@@ -1,0 +1,25 @@
+{
+  "uuid": "b6f2a1d4-3c7e-4a9b-8e21-9d4c5f7a0e11",
+  "shortName": "RainGraph",
+  "longName": "Rain Graph",
+  "companyName": "MakeAwesomeHappen",
+  "versionCode": 1,
+  "versionLabel": "1.0",
+  "sdkVersion": "3",
+  "targetPlatforms": ["aplite", "basalt", "chalk", "diorite", "emery"],
+  "watchapp": {
+    "watchface": true
+  },
+  "appKeys": {
+    "REQUEST": 0,
+    "SPAN_MIN": 1,
+    "PEAK_MMH": 2,
+    "RAIN_AT_MIN": 3,
+    "NUM_POINTS": 4,
+    "POINTS": 5,
+    "STATUS": 6
+  },
+  "resources": {
+    "media": []
+  }
+}
